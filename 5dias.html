@@ -41,12 +41,10 @@
             opacity: 0.8;
         }
 
-        /* Estilo para esconder o temporizador enquanto o vídeo está sendo exibido */
         .hide-timer {
             display: none;
         }
 
-        /* Estilo para o iframe do YouTube em fullscreen */
         .video-container {
             position: fixed;
             top: 0;
@@ -57,7 +55,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            display: none; /* Inicialmente escondido */
+            display: none;
         }
 
         iframe {
@@ -65,7 +63,6 @@
             height: 80%;
         }
 
-        /* Estilo para a mensagem de erro */
         .error-message {
             position: absolute;
             top: 0;
@@ -81,7 +78,6 @@
             font-weight: bold;
         }
 
-        /* Oculta a mensagem de erro */
         .hide-error {
             display: none;
         }
@@ -92,30 +88,23 @@
     <h2>Get ready for the surprise... merry xmas</h2>
     <div class="timer" id="timer">Calculando...</div>
 
-    <!-- Mensagem de erro -->
     <div id="errorContainer" class="error-message hide-error">
         ERRO - NÃO AUTORIZADO
     </div>
 
-    <!-- Contêiner do vídeo -->
     <div id="videoContainer" class="video-container">
-        <iframe id="youtubeVideo" src="https://www.youtube.com/embed/Lu2mOCKMuxI?autoplay=1" frameborder="0" allow="autoplay; fullscreen"></iframe>
+        <iframe id="youtubeVideo" src="https://www.youtube.com/embed/Lu2mOCKMuxI?autoplay=1&enablejsapi=1" frameborder="0" allow="autoplay; fullscreen"></iframe>
     </div>
 
     <script>
-        // Função para reiniciar o temporizador após o vídeo
         function restartTimer() {
-            // Esconde o vídeo e mostra o temporizador novamente
             document.getElementById('videoContainer').style.display = 'none';
             document.getElementById('timer').classList.remove('hide-timer');
-
-            // Reinicia a contagem do temporizador
             setInterval(updateCountdown, 1000);
         }
 
-        // Função para atualizar o contador de dias
         function updateCountdown() {
-            const targetDate = new Date("2024-12-24T00:00:00");
+            const targetDate = new Date("2024-12-23T00:00:00");
             const now = new Date();
             const diff = targetDate - now;
 
@@ -131,24 +120,40 @@
 
             document.getElementById('timer').innerText = `${days} dias, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
 
-            // Se faltar mais de 5 dias, mostra a mensagem de erro e esconde o vídeo
             if (days > 5) {
                 document.getElementById('errorContainer').classList.remove('hide-error');
-                document.getElementById('videoContainer').style.display = 'none'; // Esconde o vídeo
+                document.getElementById('videoContainer').style.display = 'none';
             } else {
-                // Caso contrário, mostra o vídeo e esconde a mensagem de erro
                 document.getElementById('errorContainer').classList.add('hide-error');
-                document.getElementById('videoContainer').style.display = 'flex'; // Exibe o vídeo
+                document.getElementById('videoContainer').style.display = 'flex';
             }
         }
 
-        // Quando a página carregar, verificar a contagem e agir
+        function onYouTubeIframeAPIReady() {
+            const player = new YT.Player('youtubeVideo', {
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                window.location.href = "index.html"; // Redireciona para a página index.html
+            }
+        }
+
         window.onload = function() {
             updateCountdown();
         };
 
-        // Inicializa o temporizador na página
-        setInterval(updateCountdown, 1000); // Atualiza o contador a cada segundo
+        setInterval(updateCountdown, 1000);
+
+        // Carrega a API do YouTube
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     </script>
 </body>
 </html>
