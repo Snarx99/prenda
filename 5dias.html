@@ -41,46 +41,52 @@
             opacity: 0.8;
         }
 
-        .audio-container {
-            display: none; /* Esconder o vídeo de fundo */
+        /* Estilo para esconder o temporizador enquanto o vídeo está sendo exibido */
+        .hide-timer {
+            display: none;
         }
 
-        /* Estilo da mensagem em tela cheia */
-        .full-screen-message {
+        /* Estilo para o iframe do YouTube em fullscreen */
+        .video-container {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            font-size: 3rem;
             display: flex;
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
         }
 
-        .show-message {
-            opacity: 1;
+        iframe {
+            width: 80%;
+            height: 80%;
         }
     </style>
 </head>
 <body>
     <h1>Revelação em...</h1>
     <h2>Get ready for the surprise... merry xmas</h2>
-    <div class="timer" id="timer"></div>
-    <div class="audio-container">
-        <iframe width="0" height="0" src="https://www.youtube.com/embed/_HCCTVGlTOg?autoplay=1&loop=1" frameborder="0" allow="autoplay"></iframe>
-    </div>
+    <div class="timer" id="timer">Calculando...</div>
 
-    <!-- Div da mensagem em tela cheia -->
-    <div id="message" class="full-screen-message">
-        <p>5 dias? Está quase</p>
+    <!-- Contêiner do vídeo -->
+    <div id="videoContainer" class="video-container">
+        <iframe id="youtubeVideo" src="https://www.youtube.com/embed/Lu2mOCKMuxI?autoplay=1&mute=1" frameborder="0" allow="autoplay; fullscreen"></iframe>
     </div>
 
     <script>
+        // Função para reiniciar o temporizador após o vídeo
+        function restartTimer() {
+            // Esconde o vídeo e mostra o temporizador novamente
+            document.getElementById('videoContainer').style.display = 'none';
+            document.getElementById('timer').classList.remove('hide-timer');
+
+            // Reinicia a contagem do temporizador
+            setInterval(updateCountdown, 1000);
+        }
+
+        // Função para atualizar o contador de dias
         function updateCountdown() {
             const targetDate = new Date("2024-12-24T00:00:00");
             const now = new Date();
@@ -88,7 +94,6 @@
 
             if (diff <= 0) {
                 document.getElementById('timer').innerText = "Chegou o grande dia!";
-                clearInterval(interval);
                 return;
             }
 
@@ -96,26 +101,29 @@
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            const milliseconds = Math.floor((diff % 1000));
 
-            // Atualiza o timer na tela
-            document.getElementById('timer').innerText = 
-                `${days} dias, ${hours} horas, ${minutes} minutos, ${seconds}.${milliseconds} segundos`;
-
-            // Verifica se faltam 5 dias para o evento
-            if (days === 5) {
-                // Exibe a mensagem em tela cheia
-                const message = document.getElementById('message');
-                message.classList.add('show-message');
-
-                // Após 3 segundos, redireciona para a página
-                setTimeout(function() {
-                    window.location.href = "5dias.html";
-                }, 3000); // 3000ms = 3 segundos
-            }
+            document.getElementById('timer').innerText = `${days} dias, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
         }
 
-        const interval = setInterval(updateCountdown, 1);
+        // Função para mostrar o vídeo e esconder o temporizador
+        function showVideoAndHideTimer() {
+            // Esconde o temporizador
+            document.getElementById('timer').classList.add('hide-timer');
+
+            // Exibe o vídeo do YouTube em fullscreen
+            document.getElementById('videoContainer').style.display = 'flex';
+
+            // Após 10 segundos, reiniciar o temporizador e ocultar o vídeo
+            setTimeout(restartTimer, 10000); // 10 segundos de vídeo
+        }
+
+        // Quando a página carregar, mostrar o vídeo
+        window.onload = function() {
+            showVideoAndHideTimer();
+        };
+
+        // Inicializa o temporizador na página
+        updateCountdown();
     </script>
 </body>
 </html>
