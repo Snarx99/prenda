@@ -63,6 +63,27 @@
             width: 80%;
             height: 80%;
         }
+
+        /* Estilo para a mensagem de erro */
+        .error-message {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(255, 0, 0, 0.8);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        /* Oculta o erro */
+        .hide-error {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -70,9 +91,14 @@
     <h2>Get ready for the surprise... merry xmas</h2>
     <div class="timer" id="timer">Calculando...</div>
 
+    <!-- Mensagem de erro -->
+    <div id="errorContainer" class="error-message hide-error">
+        ERRO - NÃO AUTORIZADO
+    </div>
+
     <!-- Contêiner do vídeo -->
-    <div id="videoContainer" class="video-container">
-        <iframe id="youtubeVideo" src="https://www.youtube.com/embed/Lu2mOCKMuxI?autoplay=1" frameborder="0" allow="autoplay"; fullscreen"></iframe>
+    <div id="videoContainer" class="video-container hide-timer">
+        <iframe id="youtubeVideo" src="https://www.youtube.com/embed/Lu2mOCKMuxI?autoplay=1" frameborder="0" allow="autoplay; fullscreen"></iframe>
     </div>
 
     <script>
@@ -103,6 +129,15 @@
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
             document.getElementById('timer').innerText = `${days} dias, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
+
+            // Se faltar mais de 5 dias, mostra a mensagem de erro e esconde o vídeo
+            if (days > 5) {
+                document.getElementById('errorContainer').classList.remove('hide-error');
+                document.getElementById('videoContainer').classList.add('hide-timer');
+            } else {
+                document.getElementById('errorContainer').classList.add('hide-error');
+                document.getElementById('videoContainer').classList.remove('hide-timer');
+            }
         }
 
         // Função para mostrar o vídeo e esconder o temporizador
@@ -117,13 +152,13 @@
             setTimeout(restartTimer, 10000); // 10 segundos de vídeo
         }
 
-        // Quando a página carregar, mostrar o vídeo
+        // Quando a página carregar, verificar a contagem e agir
         window.onload = function() {
-            showVideoAndHideTimer();
+            updateCountdown();
         };
 
         // Inicializa o temporizador na página
-        updateCountdown();
+        setInterval(updateCountdown, 1000); // Atualiza o contador a cada segundo
     </script>
 </body>
 </html>
