@@ -45,13 +45,20 @@
 <body>
     <h1>Revelação em...</h1>
     <div class="timer" id="timer"></div>
-    <audio autoplay loop>
+    <audio id="background-audio" autoplay loop>
         <source src="suspense.mp4" type="audio/mp4">
         O seu navegador não suporta o elemento de áudio.
     </audio>
 
+    <footer>
+        &copy; 2024 - Contagem Decrescente Interativa
+    </footer>
 
     <script>
+        // Inicializa o áudio no carregamento da página
+        const audio = document.getElementById('background-audio');
+        audio.volume = 0.5; // Ajusta o volume, se necessário
+
         function updateCountdown() {
             const targetDate = new Date("2024-12-24T00:00:00");
             const now = new Date();
