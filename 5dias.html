@@ -57,6 +57,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            display: none; /* Inicialmente escondido */
         }
 
         iframe {
@@ -80,7 +81,7 @@
             font-weight: bold;
         }
 
-        /* Oculta o erro */
+        /* Oculta a mensagem de erro */
         .hide-error {
             display: none;
         }
@@ -97,7 +98,7 @@
     </div>
 
     <!-- Contêiner do vídeo -->
-    <div id="videoContainer" class="video-container hide-timer">
+    <div id="videoContainer" class="video-container">
         <iframe id="youtubeVideo" src="https://www.youtube.com/embed/Lu2mOCKMuxI?autoplay=1" frameborder="0" allow="autoplay; fullscreen"></iframe>
     </div>
 
@@ -133,23 +134,12 @@
             // Se faltar mais de 5 dias, mostra a mensagem de erro e esconde o vídeo
             if (days > 5) {
                 document.getElementById('errorContainer').classList.remove('hide-error');
-                document.getElementById('videoContainer').classList.add('hide-timer');
+                document.getElementById('videoContainer').style.display = 'none'; // Esconde o vídeo
             } else {
+                // Caso contrário, mostra o vídeo e esconde a mensagem de erro
                 document.getElementById('errorContainer').classList.add('hide-error');
-                document.getElementById('videoContainer').classList.remove('hide-timer');
+                document.getElementById('videoContainer').style.display = 'flex'; // Exibe o vídeo
             }
-        }
-
-        // Função para mostrar o vídeo e esconder o temporizador
-        function showVideoAndHideTimer() {
-            // Esconde o temporizador
-            document.getElementById('timer').classList.add('hide-timer');
-
-            // Exibe o vídeo do YouTube em fullscreen
-            document.getElementById('videoContainer').style.display = 'flex';
-
-            // Após 10 segundos, reiniciar o temporizador e ocultar o vídeo
-            setTimeout(restartTimer, 10000); // 10 segundos de vídeo
         }
 
         // Quando a página carregar, verificar a contagem e agir
