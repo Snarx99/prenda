@@ -79,7 +79,7 @@
         }
 
         .hide-error {
-            display: none;
+            display: none !important;
         }
     </style>
 </head>
@@ -88,21 +88,17 @@
     <h2>Get ready for the surprise... merry xmas</h2>
     <div class="timer" id="timer">Calculando...</div>
 
+    <!-- Mensagem de erro -->
     <div id="errorContainer" class="error-message hide-error">
         ERRO - NÃO AUTORIZADO
     </div>
 
+    <!-- Contêiner do vídeo -->
     <div id="videoContainer" class="video-container">
         <iframe id="youtubeVideo" src="https://www.youtube.com/embed/Lu2mOCKMuxI?autoplay=1&enablejsapi=1" frameborder="0" allow="autoplay; fullscreen"></iframe>
     </div>
 
     <script>
-        function restartTimer() {
-            document.getElementById('videoContainer').style.display = 'none';
-            document.getElementById('timer').classList.remove('hide-timer');
-            setInterval(updateCountdown, 1000);
-        }
-
         function updateCountdown() {
             const targetDate = new Date("2024-12-23T00:00:00");
             const now = new Date();
@@ -121,9 +117,11 @@
             document.getElementById('timer').innerText = `${days} dias, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
 
             if (days > 5) {
+                // Mostra o erro e esconde o vídeo
                 document.getElementById('errorContainer').classList.remove('hide-error');
                 document.getElementById('videoContainer').style.display = 'none';
             } else {
+                // Esconde o erro e mostra o vídeo
                 document.getElementById('errorContainer').classList.add('hide-error');
                 document.getElementById('videoContainer').style.display = 'flex';
             }
@@ -139,7 +137,7 @@
 
         function onPlayerStateChange(event) {
             if (event.data === YT.PlayerState.ENDED) {
-                window.location.href = "index.html"; // Redireciona para a página index.html
+                window.location.href = "index.html";
             }
         }
 
