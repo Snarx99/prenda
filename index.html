@@ -18,11 +18,19 @@
             color: white;
             text-align: center;
             position: relative;
+            overflow: hidden;
         }
 
         h1 {
             font-size: 3rem;
             margin-bottom: 20px;
+            z-index: 2;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            z-index: 2;
         }
 
         .timer {
@@ -32,6 +40,7 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 2;
         }
 
         footer {
@@ -65,9 +74,64 @@
         .show-message {
             opacity: 1;
         }
+
+        /* Efeito de luz piscando mais rápido */
+        .lights {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 15%, rgba(0, 0, 0, 0.7) 60%);
+            animation: blink 0.5s infinite alternate; /* Alterado para piscar mais rápido */
+            z-index: 1;
+        }
+
+        /* Animação para simular as luzes piscando rapidamente */
+        @keyframes blink {
+            0% {
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 15%, rgba(0, 0, 0, 0.7) 60%);
+            }
+            50% {
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 15%, rgba(0, 0, 0, 0.5) 60%);
+            }
+            100% {
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 15%, rgba(0, 0, 0, 0.7) 60%);
+            }
+        }
+
+        /* Emojis de Pai Natal voando */
+        .santa-emoji {
+            position: absolute;
+            font-size: 3rem;
+            animation: fly 10s linear infinite;
+            z-index: 3;
+        }
+
+        /* Animação de voo lento dos emojis */
+        @keyframes fly {
+            0% {
+                top: -5%;
+                left: 100%;
+                opacity: 1;
+            }
+            50% {
+                top: 50%;
+                left: 50%;
+                opacity: 0.8;
+            }
+            100% {
+                top: 110%;
+                left: -20%;
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Luz piscando no fundo -->
+    <div class="lights" id="lights"></div>
+
     <h1>Revelação em...</h1>
     <h2>Get ready for the surprise... merry xmas</h2>
     <div class="timer" id="timer"></div>
@@ -79,6 +143,12 @@
     <div id="message" class="full-screen-message">
         <p>5 dias? Está quase</p>
     </div>
+
+    <!-- Emojis de Pai Natal voando -->
+    <div class="santa-emoji" style="animation-delay: 0s;">🎅</div>
+    <div class="santa-emoji" style="animation-delay: 3s;">🎅</div>
+    <div class="santa-emoji" style="animation-delay: 6s;">🎅</div>
+    <div class="santa-emoji" style="animation-delay: 9s;">🎅</div>
 
     <script>
         function updateCountdown() {
@@ -114,6 +184,11 @@
                 }, 3000); // 3000ms = 3 segundos
             }
         }
+
+        // Remove a animação de luzes após 3 segundos
+        setTimeout(function() {
+            document.getElementById('lights').style.animation = 'none'; // Remove a animação
+        }, 3000);
 
         const interval = setInterval(updateCountdown, 1);
     </script>
