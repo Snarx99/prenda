@@ -76,10 +76,6 @@
             font-size: 3rem;
             font-weight: bold;
         }
-
-        .hide-error {
-            display: none !important;
-        }
     </style>
 </head>
 <body>
@@ -97,6 +93,9 @@
     </div>
 
     <script>
+        // Controla se o vídeo já foi exibido
+        let isVideoDisplayed = false;
+
         function updateCountdown() {
             const targetDate = new Date("2024-12-23T00:00:00");
             const now = new Date();
@@ -115,13 +114,14 @@
             document.getElementById('timer').innerText = `${days} dias, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
 
             if (days > 5) {
-                // Mostra o erro e esconde o vídeo
-                document.getElementById('errorContainer').classList.remove('hide-error');
+                // Mantém o erro visível e esconde o vídeo
+                document.getElementById('errorContainer').style.display = 'flex';
                 document.getElementById('videoContainer').style.display = 'none';
-            } else {
-                // Esconde o erro e mostra o vídeo
-                document.getElementById('errorContainer').classList.add('hide-error');
+            } else if (!isVideoDisplayed) {
+                // Mostra o vídeo apenas uma vez
+                document.getElementById('errorContainer').style.display = 'none';
                 document.getElementById('videoContainer').style.display = 'flex';
+                isVideoDisplayed = true;
             }
         }
 
