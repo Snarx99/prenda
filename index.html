@@ -40,23 +40,23 @@
             opacity: 0.8;
         }
 
+        .audio-container {
+            display: none; /* Esconder o vídeo de fundo */
+        }
+
     </style>
 </head>
 <body>
     <h1>Revelação em...</h1>
     <div class="timer" id="timer"></div>
-<audio autoplay loop>
-        <source src="suspense.mp3" type="audio/mpeg">
-        O seu navegador não suporta o elemento de áudio.
-    </audio>
+    <div class="audio-container">
+        <iframe width="0" height="0" src="https://www.youtube.com/embed/_HCCTVGlTOg?autoplay=1&loop=1" frameborder="0" allow="autoplay"></iframe>
+    </div>
 
-<script>
-        // Inicializa o áudio no carregamento da página
-        const audio = document.getElementById('background-audio');
-        audio.volume = 0.5; // Ajusta o volume, se necessário
 
+    <script>
         function updateCountdown() {
-            const targetDate = new Date("2024-12-24T00:00:00");
+            const targetDate = new Date("2025-12-24T00:00:00");
             const now = new Date();
             const diff = targetDate - now;
 
@@ -80,4 +80,3 @@
     </script>
 </body>
 </html>
-
