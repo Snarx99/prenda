@@ -41,10 +41,6 @@
             opacity: 0.8;
         }
 
-        .hide-timer {
-            display: none;
-        }
-
         .video-container {
             position: fixed;
             top: 0;
@@ -61,43 +57,23 @@
             width: 80%;
             height: 80%;
         }
-
-        .error-message {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(255, 0, 0, 0.8);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 3rem;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
     <h1>Revelação em...</h1>
     <div class="timer" id="timer">Calculando...</div>
 
-    <!-- Mensagem de erro -->
-    <div id="errorContainer" class="error-message">
-        ERRO - NÃO AUTORIZADO
-    </div>
-
     <!-- Contêiner do vídeo -->
     <div id="videoContainer" class="video-container">
-        <iframe id="youtubeVideo" src="https://www.youtube.com/embed/Lu2mOCKMuxI?autoplay=1&enablejsapi=1" frameborder="0" allow="autoplay; fullscreen"></iframe>
+        <iframe id="youtubeVideo" src="https://www.youtube.com/embed/Lu2mOCKMuxI?enablejsapi=1" frameborder="0" allow="autoplay; fullscreen"></iframe>
     </div>
 
     <script>
-        // Controla se o vídeo já foi exibido
         let isVideoDisplayed = false;
+        let player;
 
         function updateCountdown() {
-            const targetDate = new Date("2024-12-23T00:00:00");
+            const targetDate = new Date("2024-12-24T00:00:00");
             const now = new Date();
             const diff = targetDate - now;
 
@@ -113,37 +89,36 @@
 
             document.getElementById('timer').innerText = `${days} dias, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
 
-            if (days > 5) {
-                // Mantém o erro visível e esconde o vídeo
-                document.getElementById('errorContainer').style.display = 'flex';
-                document.getElementById('videoContainer').style.display = 'none';
-            } else if (!isVideoDisplayed) {
-                // Mostra o vídeo apenas uma vez
-                document.getElementById('errorContainer').style.display = 'none';
+            if (days <= 5 && !isVideoDisplayed) {
+                // Mostra o vídeo uma vez
                 document.getElementById('videoContainer').style.display = 'flex';
                 isVideoDisplayed = true;
             }
         }
 
         function onYouTubeIframeAPIReady() {
-            const player = new YT.Player('youtubeVideo', {
+            player = new YT.Player('youtubeVideo', {
                 events: {
                     'onStateChange': onPlayerStateChange
                 }
             });
         }
 
-        window.onload = function() {
-            updateCountdown();
-        };
-
-        setInterval(updateCountdown, 1000);
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                // Esconde o vídeo quando ele termina
+                document.getElementById('videoContainer').style.display = 'none';
+            }
+        }
 
         // Carrega a API do YouTube
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         const firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // Atualiza o contador periodicamente
+        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
