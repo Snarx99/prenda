@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contagem Decrescente</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        video {
+            width: 80%;
+            height: 80%;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <h1>Revelação em...</h1>
+    <div class="timer" id="timer">Calculando...</div>
+
+    <!-- Contêiner do vídeo -->
+    <div id="videoContainer" class="video-container">
+        <video id="localVideo" controls autoplay>
+            <source src="top.mp4" type="video/mp4">
+            O seu navegador não suporta a reprodução deste vídeo.
+        </video>
+    </div>
+
+    <script>
+        let isVideoDisplayed = false;
+
+        function updateCountdown() {
+            const targetDate = new Date("2024-12-24T00:00:00");
+            const now = new Date();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                document.getElementById('timer').innerText = "Chegou o grande dia!";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('timer').innerText = `${days} dias, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
+
+            if (days <= 5 && !isVideoDisplayed) {
+                showVideo();
+            }
+        }
+
+        function showVideo() {
+            const videoContainer = document.getElementById('videoContainer');
+            const video = document.getElementById('localVideo');
+
+            videoContainer.style.display = 'flex';
+            video.play(); // Reproduz o vídeo automaticamente
+            isVideoDisplayed = true;
+
+            // Esconde o vídeo quando ele termina
+            video.onended = () => {
+                hideVideo();
+            };
+        }
+
+        function hideVideo() {
+            const videoContainer = document.getElementById('videoContainer');
+            const video = document.getElementById('localVideo');
+
+            videoContainer.style.display = 'none';
+            video.pause();
+            video.currentTime = 0; // Reinicia o vídeo para o início
+        }
+
+        // Atualiza o contador periodicamente
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
